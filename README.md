@@ -1,58 +1,76 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+﻿# 🚀 Projeto de Estudo - CRUD com Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Bem-vindo ao meu projeto de estudo! O principal objetivo deste repositório foi **aprender e praticar como criar um CRUD (Create, Read, Update, Delete)** utilizando o framework [Laravel](https://laravel.com/). 
 
-## About Laravel
+Para tornar o estudo mais prático, desenvolvi um simples **Rastreador de Hábitos**, onde é possível gerenciar e acompanhar seus hábitos no dia a dia.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📌 Funcionalidades
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Autenticação de Usuários:** Cadastro, login e acesso restrito.
+- **Gerenciamento de Hábitos (O CRUD principal):**
+  - **Create:** Cadastrar novos hábitos.
+  - **Read:** Visualizar todos os hábitos criados.
+  - **Update:** Editar o nome, descrição ou tipo de um hábito.
+  - **Delete:** Excluir permanentemente um hábito do sistema.
+- **Registros (Logs):** Marcar os hábitos como concluídos para acompanhar o progresso (HabitLog).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠️ Tecnologias Utilizadas
 
-## Learning Laravel
+- **PHP 8.x+**
+- **Laravel 11.x+** (Framework Backend e ORM Eloquent)
+- **Banco de Dados:** SQLite (padrão) / MySQL
+- **Frontend / Visualização:** Laravel Blade Components e CSS/TailwindCSS (empacotados via Vite)
+- **Testes:** Pest PHP framework
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📂 Compreendendo os Arquivos (Foco de Aprendizado)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Os componentes principais que desenvolvi/estudei estão centralizados nos seguintes diretórios:
+- **Models:** pp/Models/User.php, Habit.php e HabitLog.php
+- **Tabelas (Database):** database/migrations/
+- **Rotas Básicas:** outes/web.php
+- **Interface e Telas:** esources/views/ (Telas para exibir os itens, formulários de criação/edição e dashboard)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 🚀 Como testar localmente
 
-## Agentic Development
+Siga o passo a passo para acessar a aplicação na sua máquina:
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+1. **Clone do repositório:**
+   \\\ash
+   git clone https://github.com/seu-usuario/learn-crud.git
+   cd learn-crud
+   \\\
 
-```bash
-composer require laravel/boost --dev
+2. **Instalação das dependências e pacotes:**
+   \\\ash
+   composer install
+   npm install
+   \\\
 
-php artisan boost:install
-```
+3. **Configuração do ambiente de Banco de dados:**
+   Copie o arquivo padrão do Laravel para criar suas variáveis e gere a Application Key:
+   \\\ash
+   cp .env.example .env
+   php artisan key:generate
+   \\\
+   *(Certifique-se que o .env possui DB_CONNECTION=sqlite, e se não houver um database.sqlite em database/, o artisan o criará para você no próximo passo).*
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+4. **Rodando as tabelas e alimentando o banco (Migrations & Seeders):**
+   \\\ash
+   php artisan migrate --seed
+   \\\
 
-## Contributing
+5. **Iniciando o servidor:**
+   Você precisará rodar 2 recursos, caso tenha componentes do Vite:
+   \\\ash
+   # Terminal 1: Inicia o servidor PHP do Laravel no localhost:8000
+   php artisan serve
+   \\\
+   \\\ash
+   # Terminal 2: Inicia o empacotador de arquivos estáticos
+   npm run dev
+   \\\
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Abra o navegador em http://localhost:8000 e veja o app rodando!
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+✨ *Projeto desenvolvido com fins puramente educacionais para evolução em engenharia de software e backend com Laravel.*
