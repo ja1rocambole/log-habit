@@ -5,7 +5,7 @@
         </h1>
 
         <section class="bg-white max-w-[600px] mx-auto p-10 pb-6 border-2 mt-4">
-            <form action="{{ route('habit.update', $habit->id) }}" method="POST" class="flex flex-col">
+            <form action="{{ route('habits.update', $habit->id) }}" method="POST" class="flex flex-col">
                 @csrf
                 @method('PUT')
 
@@ -13,7 +13,7 @@
                     <label for="name">
                         Nome do Hábito
                     </label>
-                    <input type="text" name="name" placeholder="Ex: Ler 10 páginas"
+                    <input type="text" name="name" placeholder="Ex: Ler 10 páginas" value=" {{ $habit->name }} "
                         class="bg-white p-2 border-2 @error('name') border-red-500 @enderror">
                     @error('name')
                         <p class="text-red-500 text-sm">
@@ -23,7 +23,7 @@
                 </div>
 
                 <button type="submit" class="bg-white border-2 p-2">
-                    Cadastrar hábito
+                    Atualizar hábito
                 </button>
             </form>
         </section>

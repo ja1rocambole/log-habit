@@ -10,12 +10,19 @@ use Illuminate\Support\Facades\Auth;
 
 class HabitController extends Controller
 {
+    public function index()
+    {
+        $habits = Auth::user()->habits;
+
+        return view('dashboard', compact('habits'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('habit.create');
+        return view('habits.create');
     }
 
     /**
@@ -28,7 +35,7 @@ class HabitController extends Controller
         $request->user()->habits()->create($validated);
 
         return redirect()
-            ->route('site.dashboard')
+            ->route('habits.index')
             ->with('success', 'Hábito criado com sucesso!');
     }
 
@@ -39,7 +46,7 @@ class HabitController extends Controller
      */
     public function edit(Habit $habit)
     {
-        return view('habit.edit', compact('habit'));
+        return view('habits.edit', compact('habit'));
     }
 
     /**
@@ -54,7 +61,7 @@ class HabitController extends Controller
         $habit->update($request->all());
 
         return redirect()
-            ->route('site.dashboard')
+            ->route('habits.index')
             ->with('success', 'Hábito atualizado com sucesso!');
     }
 
@@ -70,7 +77,7 @@ class HabitController extends Controller
         $habit->delete();
 
         return redirect()
-            ->route('site.dashboard')
+            ->route('habits.index')
             ->with('success', 'Hábito deletado com sucesso!');
     }
 }
