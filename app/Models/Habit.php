@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,5 +22,13 @@ class Habit extends Model
     public function habitLogs(): HasMany
     {
         return $this->hasMany(HabitLog::class);
+    }
+
+    public function wasCompletedToday(): bool
+    {
+        return $this->habitLogs()
+            ->whereDate('completed_at', Carbon::today()->toDateString())
+            ->get()
+            ->isNotEmpty();
     }
 }

@@ -25,17 +25,17 @@
 
             <ul class="flex flex-col gap-2">
                 @forelse($habits as $item)
-                    @php
+                    {{-- @php
                         $wasCompletedToday = $item->habitLogs
                             ->where('user_id', auth()->id())
                             ->where('completed_at', \Carbon\Carbon::today()->toDateString())
                             ->isNotEmpty();
-                    @endphp
+                    @endphp --}}
                     <li class="habit-shadow-lg p-2 bg-[#FFDAAC]">
                         <form action="{{ route('habits.toggle', $item->id) }}" method="POST"
                             class="flex gap-2 items-center" id="form-{{ $item->id }}">
                             @csrf
-                            <input type="checkbox" class="w-5 h-5" {{ $wasCompletedToday ? 'checked' : '' }}
+                            <input type="checkbox" class="w-5 h-5" {{ $item->wasCompletedToday() ? 'checked' : '' }}
                                 onChange="document.getElementById('form-{{ $item->id }}').submit()" />
                             <p class="font-bold text-lg">
                                 {{ $item->name }}
