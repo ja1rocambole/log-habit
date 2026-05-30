@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Habit;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HabitRequest;
+use App\Models\HabitLog;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -86,5 +88,39 @@ class HabitController extends Controller
         $habits = Auth::user()->habits;
 
         return view('habits.settings', compact('habits'));
+    }
+
+    public function toggle(Habit $habit)
+    {
+        if ($habit->user_id !== Auth::id()){
+            abort(403, 'Ação não autorizada.');
+        }
+
+        $today = Carbon::today()->toDateString();
+
+        $log = HabitLog::query()
+            ->where('habit_id', $habit->id)
+            ->where('completed_at', $today)
+            ->first();
+
+
+        if ($log) {
+            $log->delete();
+            $message = 'Hábito desmarcado.';
+    }
+        else{
+            HabitLog::create([
+                'user_id' => Auth::id(),
+                'habit_id' => $habit->id,
+                'completed_at' => today()
+            ]);
+
+            $message = 'Hábito marcado como concluído.';
+
+            }
+
+            return redirect()
+                ->route('habits.index')
+                ->with('success', $message);
     }
 }
