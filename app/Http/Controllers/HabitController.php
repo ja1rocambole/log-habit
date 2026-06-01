@@ -7,11 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\HabitRequest;
 use App\Models\HabitLog;
 use Carbon\Carbon;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HabitController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
         $habits = Auth::user()->habits()
@@ -50,6 +53,8 @@ class HabitController extends Controller
      */
     public function edit(Habit $habit)
     {
+        $this->authorize('update', $habit);
+
         return view('habits.edit', compact('habit'));
     }
 
@@ -58,9 +63,7 @@ class HabitController extends Controller
      */
     public function update(HabitRequest $request, Habit $habit)
     {
-         if ($habit->user_id !== Auth::id()) {
-            abort(403, 'Ação não autorizada.');
-        }
+        $this->authorize('update', $habit);
 
         $habit->update($request->all());
 
@@ -74,10 +77,8 @@ class HabitController extends Controller
      */
     public function destroy(Habit $habit)
     {
-        if ($habit->user_id !== Auth::id()) {
-            abort(403, 'Ação não autorizada.');
-        }
-        // dd($habit);
+        $this->authorize('delete', $habit);
+
         $habit->delete();
 
         return redirect()
@@ -94,9 +95,7 @@ class HabitController extends Controller
 
     public function toggle(Habit $habit)
     {
-        if ($habit->user_id !== Auth::id()){
-            abort(403, 'Ação não autorizada.');
-        }
+        $this->authorize('toggle', $habit);
 
         $today = Carbon::today()->toDateString();
 
