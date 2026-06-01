@@ -19,41 +19,57 @@
         @endsession
 
         <div>
-            <h2 class="text-lg mt-8 mb-2">
-                {{ date('d/m/Y') }}
-            </h2>
+            <div>
+                @forelse($habits as $habit)
+                    <x-contribution :habit="$habit" />
+                @empty
+                    <div>
+                        <p class="text-black">
+                            Nenhum hábito para exibir histórico.
+                        </p>
+                        <a href="{{ route('habits.create') }}" class="underline ">
+                            Crie um novo hábito
+                        </a>
+                    </div>
+                @endforelse
+            </div>
 
-            <ul class="flex flex-col gap-2">
-                @forelse($habits as $item)
-                    {{-- @php
+            <div>
+                <h2 class="text-lg mt-8 mb-2">
+                    {{ date('d/m/Y') }}
+                </h2>
+
+                <ul class="flex flex-col gap-2">
+                    @forelse($habits as $item)
+                        {{-- @php
                         $wasCompletedToday = $item->habitLogs
                             ->where('user_id', auth()->id())
                             ->where('completed_at', \Carbon\Carbon::today()->toDateString())
                             ->isNotEmpty();
                     @endphp --}}
-                    <li class="habit-shadow-lg p-2 bg-[#FFDAAC]">
-                        <form action="{{ route('habits.toggle', $item->id) }}" method="POST"
-                            class="flex gap-2 items-center" id="form-{{ $item->id }}">
-                            @csrf
-                            <input type="checkbox" class="w-5 h-5" {{ $item->wasCompletedToday() ? 'checked' : '' }}
-                                onChange="document.getElementById('form-{{ $item->id }}').submit()" />
-                            <p class="font-bold text-lg">
-                                {{ $item->name }}
+                        <li class="habit-shadow-lg p-2 bg-[#FFDAAC]">
+                            <form action="{{ route('habits.toggle', $item->id) }}" method="POST"
+                                class="flex gap-2 items-center" id="form-{{ $item->id }}">
+                                @csrf
+                                <input type="checkbox" class="w-5 h-5" {{ $item->wasCompletedToday() ? 'checked' : '' }}
+                                    onChange="document.getElementById('form-{{ $item->id }}').submit()" />
+                                <p class="font-bold text-lg">
+                                    {{ $item->name }}
 
 
-                            </p>
+                                </p>
 
-                        </form>
-                    </li>
-                @empty
-                    <p>
-                        Ainda não tem nenhuma hábito cadastrado
-                    </p>
-                    <a href="{{ route('habits.create') }}" class="bg-white p-2 border-2">
-                        Cadastre um novo hábito agora
-                    </a>
-                @endforelse
-            </ul>
-        </div>
+                            </form>
+                        </li>
+                    @empty
+                        <p>
+                            Ainda não tem nenhuma hábito cadastrado
+                        </p>
+                        <a href="{{ route('habits.create') }}" class="bg-white p-2 border-2">
+                            Cadastre um novo hábito agora
+                        </a>
+                    @endforelse
+                </ul>
+            </div>
     </main>
 </x-layout>
