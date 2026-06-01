@@ -1,6 +1,6 @@
 <x-layout>
     <main class="py-10 max-w-5xl mx-auto min-h-[calc(100vh-160px)] px-4">
-        s
+
         <x-navbar />
 
         @session('success')
