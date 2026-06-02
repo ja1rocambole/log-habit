@@ -125,9 +125,14 @@ class HabitController extends Controller
                 ->with('success', $message);
     }
 
-    public function history()
+    public function history(?int $year = null)
     {
-        $selectedYear = Carbon::now()->year;
+        $selectedYear = $year ?? Carbon::now()->year;
+        $avaliableYears = range(2024, Carbon::now()->year);
+
+        if(!in_array($selectedYear, $avaliableYears)) {
+            abort(404, 'Ano inválido.');
+        }
 
         $startDate = Carbon::create($selectedYear, 1, 1);
         $endDate = Carbon::create($selectedYear, 12, 31, 23, 59, 59);
@@ -138,6 +143,6 @@ class HabitController extends Controller
             }])
             ->get();
 
-        return view('habits.history', compact('habits', 'selectedYear'));
+        return view('habits.history', compact('habits', 'selectedYear', 'avaliableYears'));
     }
 }
