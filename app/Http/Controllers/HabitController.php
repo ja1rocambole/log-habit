@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Habit;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\HabitRequest;
+use App\Models\Habit;
 use App\Models\HabitLog;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class HabitController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index()
+    public function index(): View
     {
         $habits = Auth::user()->habits()
-        ->with('habitLogs')
-        ->get();
+            ->with('habitLogs')
+            ->get();
 
         return view('dashboard', compact('habits'));
     }
@@ -27,7 +27,7 @@ class HabitController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('habits.create');
     }
@@ -39,14 +39,12 @@ class HabitController extends Controller
     {
         $validated = $request->validated();
 
-        $request->user()->habits()->create($validated);
+        Auth::user()->habits()->create($validated);
 
         return redirect()
             ->route('habits.index')
             ->with('success', 'Hábito criado com sucesso!');
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -83,7 +81,7 @@ class HabitController extends Controller
 
         return redirect()
             ->route('habits.index')
-            ->with('success', 'Hábito deletado com sucesso!');
+            ->with('warning', 'Hábito removido com sucesso!');
     }
 
     public function settings()
@@ -97,7 +95,9 @@ class HabitController extends Controller
     {
         $this->authorize('toggle', $habit);
 
+
         $today = Carbon::today()->toDateString();
+
 
         $log = HabitLog::query()
             ->where('habit_id', $habit->id)
@@ -105,27 +105,28 @@ class HabitController extends Controller
             ->first();
 
 
-        if ($log) {
+        if($log){
+
             $log->delete();
+            $alert = 'warning';
             $message = 'Hábito desmarcado.';
+        } else {
+            HabitLog::query()
+                ->create([
+                    'user_id' => Auth::user()->id,
+                    'habit_id' => $habit->id,
+                    'completed_at' => $today,
+                ]);
+            $alert = 'success';
+            $message = 'Hábito concluído 👏';
+        }
+
+        return redirect()
+            ->route('habits.index')
+            ->with($alert, $message);
     }
-        else{
-            HabitLog::create([
-                'user_id' => Auth::id(),
-                'habit_id' => $habit->id,
-                'completed_at' => today()
-            ]);
 
-            $message = 'Hábito marcado como concluído.';
-
-            }
-
-            return redirect()
-                ->route('habits.index')
-                ->with('success', $message);
-    }
-
-    public function history(?int $year = null)
+    public function history(?int $year = null): View
     {
         $selectedYear = $year ?? Carbon::now()->year;
         $avaliableYears = range(2024, Carbon::now()->year);
